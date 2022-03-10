@@ -9,35 +9,44 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use App\Exception;
 
 #[AsCommand(
     name: 'CommissionCalculator',
-    description: 'Add a short description for your command',
+    description: 'Calculate the commision per transaction',
 )]
 class CommissionCalculatorCommand extends Command
 {
     protected function configure(): void
     {
         $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            // ->addArgument('input_file_path', InputArgument::OPTIONAL, 'JSON Formatted')
+            ->addOption('input_file_path', null, InputOption::VALUE_REQUIRED, 'List of transactions - JSON Formatted')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
+        // $inputFileName = $input->getArgument('input_file_path');
+        $inputFilePath = $input->getOption('input_file_path');
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
+        try{
+
+            if (!file_exists($inputFilePath)) {
+                throw new Exception\InputFileNotExists();
+            }
+
+            // TODO code here
+
+            $io->success('Calculation has been finished successfully');
+        
+
+        } catch (\Throwable $e) {
+            $io->error('Something Went Wrong..!');
+            $io->note($e->getMessage());
+            return Command::FAILURE;
         }
-
-        if ($input->getOption('option1')) {
-            // ...
-        }
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
         return Command::SUCCESS;
     }
