@@ -3,5 +3,5 @@
 namespace App\Exception;
 
 class InputFileNotExists extends \Exception{
-	protected $message = "The given name as input file name doesn not look correct";
+	protected $message = "Use the correct input file path as an option for your command, like this --input_file_path=path/to/file";
 }

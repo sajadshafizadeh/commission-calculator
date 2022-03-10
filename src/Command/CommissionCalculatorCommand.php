@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Exception;
+use App\Model\Service;
 
 #[AsCommand(
     name: 'CommissionCalculator',
@@ -17,25 +18,27 @@ use App\Exception;
 )]
 class CommissionCalculatorCommand extends Command
 {
+
     protected function configure(): void
     {
         $this
-            // ->addArgument('input_file_path', InputArgument::OPTIONAL, 'JSON Formatted')
-            ->addOption('input_file_path', null, InputOption::VALUE_REQUIRED, 'List of transactions - JSON Formatted')
-        ;
+        ->addOption('input_file_path', null, InputOption::VALUE_REQUIRED, 'List of transactions - JSON Formatted');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        // $inputFileName = $input->getArgument('input_file_path');
-        $inputFilePath = $input->getOption('input_file_path');
+
+        /* To get the passed input file path as an option
+         * Cast it to string if it's not passed to avoid type-hint-error
+         */
+        $inputFilePath = (string) $input->getOption('input_file_path');
 
         try{
 
-            if (!file_exists($inputFilePath)) {
-                throw new Exception\InputFileNotExists();
-            }
+            $InputHandler = new Service\InputHandler($inputFilePath);
+            $InputHandler->handle();
+
 
             // TODO code here
 
