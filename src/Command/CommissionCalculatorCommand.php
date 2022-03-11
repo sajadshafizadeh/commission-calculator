@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Exception;
 use App\Model\Service;
+use App\Model\Entity;
 
 #[AsCommand(
     name: 'CommissionCalculator',
@@ -36,11 +37,23 @@ class CommissionCalculatorCommand extends Command
 
         try{
 
-            $InputHandler = new Service\InputHandler($inputFilePath);
-            $InputHandler->handle();
+            // To get list of all exchanges
+            $exchangeRatesObject = new Entity\Exchange;
+            $exchangeRates = $exchangeRatesObject->getExchangeRates();
 
+            // To load the input file
+            $inputHandlerObject = new Service\InputHandler($inputFilePath);
+            $inputContent = $inputHandlerObject->inputLoader();
 
-            // TODO code here
+            // To loop on the transactions
+            foreach (explode("\n", $inputContent) as $row)  {
+
+                $transactionObject = $inputHandlerObject->transactionParser($row);
+                $commisionObject = new Service\Commission($transactionObject, $exchangeRates);
+
+                $commission = $commisionObject->calculateCommission();
+                $io->writeln($commission);
+            }
 
             $io->success('Calculation has been finished successfully');
         

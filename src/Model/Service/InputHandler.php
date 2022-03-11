@@ -6,31 +6,19 @@ use App\Model\Entity;
 
 class InputHandler {
 
-	private $fileContent;
-
 	public function __construct(private string $inputFilePath) {
 
-		// To check file existance
+		// To check input file existance
 	    if (!file_exists($this->inputFilePath)) {
 	        throw new Exception\InputFileNotExists();
 	    }
 
 	}
 
-	public function handle() : void {
-
-			// Load the input file
-			$this->inputLoader();
-
-			// Looping/parsing the file content (transaction)
-			$this->transactionParser();
-
-	}
-
-	private function inputLoader() : void {
+	public function inputLoader() : string {
 
 		try {
-			$this->fileContent = file_get_contents($this->inputFilePath);
+			return file_get_contents($this->inputFilePath);
 	    
 	    } catch (\Exception $e){
 	    	throw new Exception\InputLoadingFailed();
@@ -38,27 +26,20 @@ class InputHandler {
 
 	}
 
-	private function transactionParser() : void {
+	public function transactionParser(string $row) : Entity\Transaction {
 
 		try {
-			foreach (explode("\n", $this->fileContent) as $transaction)  {
+			
+			// To turn the row (json formatted) into array 
+	    	$decoded_input = json_decode($row, true, JSON_THROW_ON_ERROR);
 
-				// To decoding each row in json formatted 
-		    	$decoded_input = json_decode($transaction, true, JSON_THROW_ON_ERROR);
+	        $bin      = $decoded_input['bin'] ?? null;
+	        $amount   = $decoded_input['amount'] ?? null;
+	        $currency = $decoded_input['currency'] ?? null;
 
-		        $bin      = $decoded_input['bin'] ?? null;
-		        $amount   = $decoded_input['amount'] ?? null;
-		        $currency = $decoded_input['currency'] ?? null;
+	    	return new Entity\Transaction($bin, $amount, $currency);
 
-		    	$transactionObject = new Transaction($bin, $amount, $currency);
-		    	$isEurope = $transactionObject->isEurope();
-
-
-		        // TODO transaction entity should be called here
-
-			}
-
-		}  catch (JsonException $e) {
+		}  catch (\JsonException $e) {
 		    throw new EncryptException($e->getMessage());
 		}
 	} 

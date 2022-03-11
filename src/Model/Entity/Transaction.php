@@ -6,20 +6,28 @@ class Transaction {
 
 	CONST BIN_DETAILS_BASE_URL = "https://lookup.binlist.net/";
 
-	private binDetails;
+	private $binDetails;
 
 	public function __construct(private int $bin, private float $amount, private string $currency){}
 
 	public function isEurope() : bool{
 
 		// To call the APi, Get the result, Set it to the property
-		$this->setBinDetails;
+		$this->setBinDetails();
 
 		// To part the result, Get the country name (card-issuer) 
 		$cardIssuerCoutnryName = $this->getBinBelongsToCountry();
 
 		// To check if the country is one of the European ones
-		return in_array($cardIssuerCoutnryName, $this->EuropeContries);
+		return in_array($cardIssuerCoutnryName, $this->EuropeContries());
+	}
+
+	public function getCurrency() : string {
+		return $this->currency;
+	}
+
+	public function getAmount() : string {
+		return $this->amount;
 	}
 
 	private function setBinDetails() : void {
@@ -42,11 +50,11 @@ class Transaction {
 	}
 
 	private function getBinBelongsToCountry() : ?string {
-		return $this->binDetails->country->alpha2 ?? throw new \Exception("Contry not extends in Bin details");
+		return $this->binDetails['country']['alpha2'] ?? throw new \Exception("Contry not exists in Bin details");
 	} 
 
 
-	private function EuropeContries(string $city_short_name): array {
+	private function EuropeContries(): array {
 
         return [
             'AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'
