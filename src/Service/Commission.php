@@ -13,7 +13,7 @@ class Commission{
 
 	public function __construct(private array $exchangeRates) {}
 
-	public function calculateCommission(object $transaction) : float {
+	public function calculateCommission(object $transaction) : string {
 
         $amount = $transaction->getAmount();
         $currency = $transaction->getCurrency();
@@ -33,9 +33,10 @@ class Commission{
         return $currency === self::MAIN_CURRENCY || $rate === 0.0 ? $amount : $amount / $rate;
 	}
 
-	protected function roudUp(float $amount) : float {
+	protected function roudUp(float $amount) : string {
 		$fraction = self::ROUNDING_PRECISION > 0 ? self::ROUNDING_PRECISION : 0; 
 		$mult = pow(10, $fraction);
-  		return ceil($amount * $mult) / $mult;
+  		$roundedUp = ceil($amount * $mult) / $mult;
+  		return number_format($roundedUp, 2);
 	}
 }
