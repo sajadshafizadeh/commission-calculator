@@ -6,7 +6,9 @@
 
 **Note1:** Replace the value of `--input_file_path` option with the real input (transactions) file on your computer.
 
-**Note2:** Since the excahge list API has a tough limitation reach, I put its content inside a file and use that file while developing. You can simple comment the current `EXCHANGE_RATES_FILE` (located inside `src\Command\CommissionCalculatorCommand.php`) and uncomment the upper line to use the API again for calculation.
+**Note2:** Run `php ./vendor/bin/phpunit` to execute tests.
+
+**Note3:** Since the excahge list API has a tough limitation reach, I put its content inside a file and use that file while developing. You can simple comment the current `EXCHANGE_RATES_FILE` (located inside `src\Command\CommissionCalculatorCommand.php`) and uncomment the upper line to use the API again for calculation.
 
 ----
 
