@@ -6,10 +6,10 @@ use App\Entity;
 
 class Commission{
 
-	CONST MAIN_CURRENCY = "EUR";
-	CONST IS_EUROPE_RATIO = 0.01;
-	CONST IS_NOT_EUROPE_RATIO = 0.02;
-	CONST ROUNDING_PRECISION = 2; // fraction
+	private const MAIN_CURRENCY = "EUR";
+	private const IS_EUROPE_RATIO = 0.01;
+	private const IS_NOT_EUROPE_RATIO = 0.02;
+	private const ROUNDING_PRECISION = 2; // fraction
 
 	public function __construct(private object $transaction, private array $exchangeRates) {}
 
