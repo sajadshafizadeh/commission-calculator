@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Service;
+namespace App\Service;
 use App\Exception;
-use App\Model\Entity;
+use App\Entity;
 
 class InputHandler {
 
@@ -29,13 +29,13 @@ class InputHandler {
 	public function transactionParser(string $row) : Entity\Transaction {
 
 		try {
-			
+
 			// To turn the row (json formatted) into array 
 	    	$decoded_input = json_decode($row, true, JSON_THROW_ON_ERROR);
 
-	        $bin      = $decoded_input['bin'] ?? null;
-	        $amount   = $decoded_input['amount'] ?? null;
-	        $currency = $decoded_input['currency'] ?? null;
+	        $bin      = $decoded_input['bin'] ?? throw new Exception\InputInvalidJsonFormatted;
+	        $amount   = $decoded_input['amount'] ?? throw new Exception\InputInvalidJsonFormatted;
+	        $currency = $decoded_input['currency'] ?? throw new Exception\InputInvalidJsonFormatted;
 
 	    	return new Entity\Transaction($bin, $amount, $currency);
 

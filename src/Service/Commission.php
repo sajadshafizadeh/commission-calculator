@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Service;
+namespace App\Service;
 
-use App\Model\Entity;
+use App\Entity;
 
 class Commission{
 

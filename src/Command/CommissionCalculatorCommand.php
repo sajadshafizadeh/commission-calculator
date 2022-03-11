@@ -10,8 +10,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Exception;
-use App\Model\Service;
-use App\Model\Entity;
+use App\Service;
+use App\Entity;
 
 #[AsCommand(
     name: 'CommissionCalculator',
