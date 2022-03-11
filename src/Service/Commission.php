@@ -13,7 +13,7 @@ class Commission{
 
 	public function __construct(private array $exchangeRates) {}
 
-	public function calculateCommission(object $transaction) : string {
+	public function calculateCommission($transaction) : string {
 
         $amount = $transaction->getAmount();
         $currency = $transaction->getCurrency();

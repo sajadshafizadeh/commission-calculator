@@ -6,7 +6,7 @@ class Exchange {
 
 	public function __construct(private string $exchangeRatesFile) {}
 
-    public function getExchangeRates(): ?array {
+    public function getRates(): ?array {
 
         try {
             $exchangeDetails = file_get_contents($this->exchangeRatesFile);

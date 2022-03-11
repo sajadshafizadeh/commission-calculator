@@ -15,10 +15,12 @@ class InputHandler {
 
 	}
 
-	public function inputLoader() : string {
+	public function inputLoader() : array {
 
 		try {
-			return file_get_contents($this->inputFilePath);
+			
+			$inputContent = file_get_contents($this->inputFilePath);
+			return explode("\n", $inputContent);
 	    
 	    } catch (\Exception $e){
 	    	throw new Exception\InputLoadingFailed();
