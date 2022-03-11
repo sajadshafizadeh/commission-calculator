@@ -4,7 +4,7 @@ namespace App\Entity;
 
 class Transaction {
 
-	CONST BIN_DETAILS_BASE_URL = "https://lookup.binlist.net/";
+	const BIN_DETAILS_BASE_URL = "https://lookup.binlist.net/";
 
 	private $binDetails;
 
@@ -19,7 +19,7 @@ class Transaction {
 		$cardIssuerCoutnryName = $this->getBinBelongsToCountry();
 
 		// To check if the country is one of the European ones
-		return in_array($cardIssuerCoutnryName, $this->EuropeContries());
+		return in_array($cardIssuerCoutnryName, self::EUROPE_CONTRIES);
 	}
 
 	public function getCurrency() : string {
@@ -54,11 +54,8 @@ class Transaction {
 	} 
 
 
-	private function EuropeContries(): array {
-
-        return [
-            'AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'
-        ];
-    }
+	private const EUROPE_CONTRIES = [
+    	'AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK'
+    ];
 
 }
