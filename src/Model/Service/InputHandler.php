@@ -2,6 +2,7 @@
 
 namespace App\Model\Service;
 use App\Exception;
+use App\Model\Entity;
 
 class InputHandler {
 
@@ -21,8 +22,8 @@ class InputHandler {
 			// Load the input file
 			$this->inputLoader();
 
-			// Looping/parsing the file content
-			$this->inputParser();
+			// Looping/parsing the file content (transaction)
+			$this->transactionParser();
 
 	}
 
@@ -37,7 +38,7 @@ class InputHandler {
 
 	}
 
-	private function inputParser() : void {
+	private function transactionParser() : void {
 
 		try {
 			foreach (explode("\n", $this->fileContent) as $transaction)  {
@@ -45,9 +46,12 @@ class InputHandler {
 				// To decoding each row in json formatted 
 		    	$decoded_input = json_decode($transaction, true, JSON_THROW_ON_ERROR);
 
-		        $bin      = $decoded_input['bin'];
-		        $amount   = $decoded_input['amount'];
-		        $currency = $decoded_input['currency'];
+		        $bin      = $decoded_input['bin'] ?? null;
+		        $amount   = $decoded_input['amount'] ?? null;
+		        $currency = $decoded_input['currency'] ?? null;
+
+		    	$transactionObject = new Transaction($bin, $amount, $currency);
+		    	$isEurope = $transactionObject->isEurope();
 
 
 		        // TODO transaction entity should be called here
