@@ -19,6 +19,9 @@ use App\Service;
 class CommissionCalculatorCommand extends Command
 {
 
+    // private const EXCHANGE_RATES_FILE = "http://api.exchangeratesapi.io/latest?access_key=83e75e5b7793d79b4b7087dfab274276";
+    private const EXCHANGE_RATES_FILE = "rates.json"; // used for tests, because the API has a limitation reach (500 call per month)
+
     protected function configure(): void
     {
         $this
@@ -34,10 +37,10 @@ class CommissionCalculatorCommand extends Command
          */
         $inputFilePath = (string) $input->getOption('input_file_path');
 
-        try{
+        try {
 
             // To get list of all exchanges
-            $exchangeRatesObject = new Service\Exchange;
+            $exchangeRatesObject = new Service\Exchange(self::EXCHANGE_RATES_FILE);
             $exchangeRates = $exchangeRatesObject->getExchangeRates();
 
             // To load the input file
