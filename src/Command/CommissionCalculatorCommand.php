@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use App\Exception;
 use App\Service;
-use App\Entity;
 
 #[AsCommand(
     name: 'CommissionCalculator',
@@ -38,7 +37,7 @@ class CommissionCalculatorCommand extends Command
         try{
 
             // To get list of all exchanges
-            $exchangeRatesObject = new Entity\Exchange;
+            $exchangeRatesObject = new Service\Exchange;
             $exchangeRates = $exchangeRatesObject->getExchangeRates();
 
             // To load the input file
