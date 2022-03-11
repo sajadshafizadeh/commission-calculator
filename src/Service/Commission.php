@@ -11,16 +11,16 @@ class Commission{
 	private const IS_NOT_EUROPE_RATIO = 0.02;
 	private const ROUNDING_PRECISION = 2; // fraction
 
-	public function __construct(private object $transaction, private array $exchangeRates) {}
+	public function __construct(private array $exchangeRates) {}
 
-	public function calculateCommission() : float {
+	public function calculateCommission(object $transaction) : float {
 
-        $amount = $this->transaction->getAmount();
-        $currency = $this->transaction->getCurrency();
+        $amount = $transaction->getAmount();
+        $currency = $transaction->getCurrency();
         $rate = $this->exchangeRates[$currency];
 
+        $isEurope = $transaction->isEurope();
         $amountFixed = $this->getAmountFixed($amount, $currency, $rate);
-        $isEurope = $this->transaction->isEurope();
 
         $commission = $amountFixed * ($isEurope ? self::IS_EUROPE_RATIO : self::IS_NOT_EUROPE_RATIO);
         return $this->roudUp($commission);
