@@ -30,6 +30,9 @@ class Transaction {
 		return $this->amount;
 	}
 
+	/* TODO It does more than just setting the binDetails
+	 * Ideally the file loading and error handling should be located in a different namespace
+	 */
 	private function setBinDetails() : void {
 
 		try {
