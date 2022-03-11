@@ -21,6 +21,7 @@ class CommissionCalculatorCommand extends Command
 
     // private const EXCHANGE_RATES_FILE = "http://api.exchangeratesapi.io/latest?access_key=83e75e5b7793d79b4b7087dfab274276";
     private const EXCHANGE_RATES_FILE = "rates.json"; // used for tests, because the API has a limitation reach (500 call per month)
+    private const BIN_DETAILS_BASE_URL = "https://lookup.binlist.net/";
 
     protected function configure(): void
     {
@@ -39,20 +40,17 @@ class CommissionCalculatorCommand extends Command
 
         try {
 
-            // To get list of all exchanges
-            $exchangeRatesObject = new Service\Exchange(self::EXCHANGE_RATES_FILE);
-            $exchangeRates = $exchangeRatesObject->getRates();
+            $exchangeObject = new Service\Exchange(self::EXCHANGE_RATES_FILE, self::BIN_DETAILS_BASE_URL);
 
             // To load the input file
             $inputHandlerObject = new Service\InputHandler($inputFilePath);
             $entries = $inputHandlerObject->inputLoader();
 
             // To canculate the commision
-            $commisionObject = new Service\Commission($exchangeRates);
+            $commisionObject = new Service\Commission($exchangeObject);
 
             // To loop on the transactions
             foreach ($entries as $entry)  {
-
                 $transactionObject = $inputHandlerObject->transactionParser($entry);
                 $commission = $commisionObject->calculateCommission($transactionObject);
                 $io->writeln($commission);

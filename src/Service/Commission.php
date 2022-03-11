@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity;
+use App\Service;
 
 class Commission{
 
@@ -11,18 +12,20 @@ class Commission{
 	private const IS_NOT_EUROPE_RATIO = 0.02;
 	private const ROUNDING_PRECISION = 2; // fraction
 
-	public function __construct(private array $exchangeRates) {}
+	public function __construct(private Service\Exchange $exchange) {}
 
-	public function calculateCommission($transaction) : string {
+	public function calculateCommission(Entity\Transaction $transaction) : string {
 
         $amount = $transaction->getAmount();
         $currency = $transaction->getCurrency();
-        $rate = $this->exchangeRates[$currency];
 
-        $isEurope = $transaction->isEurope();
+        $this->exchange->loadBinDetails($transaction);
+        $rate = $this->exchange->getRates()[$currency];
+
+        $isFromEU = $transaction->isFromEU();
         $amountFixed = $this->getAmountFixed($amount, $currency, $rate);
 
-        $commission = $amountFixed * ($isEurope ? self::IS_EUROPE_RATIO : self::IS_NOT_EUROPE_RATIO);
+        $commission = $amountFixed * ($isFromEU ? self::IS_EUROPE_RATIO : self::IS_NOT_EUROPE_RATIO);
         return $this->roudUp($commission);
 	}
 

@@ -4,16 +4,11 @@ namespace App\Entity;
 
 class Transaction {
 
-	const BIN_DETAILS_BASE_URL = "https://lookup.binlist.net/";
-
 	private $binDetails;
 
 	public function __construct(private int $bin, private float $amount, private string $currency){}
 
-	public function isEurope() : bool{
-
-		// To call the APi, Get the result, Set it to the property
-		$this->setBinDetails();
+	public function isFromEU() : bool {
 
 		// To part the result, Get the country name (card-issuer) 
 		$cardIssuerCoutnryName = $this->getBinBelongsToCountry();
@@ -22,34 +17,20 @@ class Transaction {
 		return in_array($cardIssuerCoutnryName, self::EUROPE_CONTRIES);
 	}
 
-	public function getCurrency() : string {
-		return $this->currency;
+	public function getBin() : string {
+		return $this->bin;
 	}
 
 	public function getAmount() : string {
 		return $this->amount;
 	}
 
-	/* TODO It does more than just setting the binDetails
-	 * Ideally the file loading and error handling should be located in a different namespace
-	 */
-	private function setBinDetails() : void {
+	public function getCurrency() : string {
+		return $this->currency;
+	}
 
-		try {
-
-			$binDetailsContent = file_get_contents(self::BIN_DETAILS_BASE_URL . $this->bin);
-			
-			if($binDetailsContent === false || empty($binDetailsContent)) {
-				throw new Exception\BinDetailsUnreachable();
-			}
-			
-			$this->binDetails = json_decode($binDetailsContent, true, JSON_THROW_ON_ERROR);
-
-
-		} catch(\Exception $e){
-			throw new \Exception("Something went wrong in getting bin details");
-		}
-
+	public function setBinDetails($details) : void {
+		$this->binDetails = $details;
 	}
 
 	private function getBinBelongsToCountry() : ?string {

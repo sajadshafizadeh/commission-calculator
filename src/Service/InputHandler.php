@@ -12,7 +12,6 @@ class InputHandler {
 	    if (!file_exists($this->inputFilePath)) {
 	        throw new Exception\InputFileNotExists();
 	    }
-
 	}
 
 	public function inputLoader() : array {
