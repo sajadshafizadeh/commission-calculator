@@ -41,18 +41,20 @@ class CommissionCalculatorCommand extends Command
         try {
 
             $exchangeObject = new Service\Exchange(self::EXCHANGE_RATES_FILE, self::BIN_DETAILS_BASE_URL);
+            $rates = $exchangeObject->getRates();
 
             // To load the input file
             $inputHandlerObject = new Service\InputHandler($inputFilePath);
             $entries = $inputHandlerObject->inputLoader();
 
             // To canculate the commision
-            $commisionObject = new Service\Commission($exchangeObject);
+            $commisionObject = new Service\Commission();
 
             // To loop on the transactions
             foreach ($entries as $entry)  {
                 $transactionObject = $inputHandlerObject->transactionParser($entry);
-                $commission = $commisionObject->calculateCommission($transactionObject);
+                $exchangeObject->loadBinDetails($transactionObject);
+                $commission = $commisionObject->calculateCommission($transactionObject, $rates);
                 $io->writeln($commission);
             }
 
