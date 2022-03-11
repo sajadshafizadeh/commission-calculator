@@ -35,5 +35,11 @@
 
 - Caching exchange rates, reading base URLs from a config file, putting commission calculation formula in a different file and etc .. are good-to-have things that looked beyond the scope of the exercise to me.
 
+- Since you mentioned "Switch our currency rates provider", I believe in that case we need an interface and implemented classes per provider.
+
 - I did it at different times/places. Partially at home, partially in the library, and even partially at the bus :P . So, excuse me if you see something ugly in it. I could not concentrate much this week.
 
+
+----
+
+### [The exercise link](https://gist.github.com/PayseraGithub/634074b26e1a2a5e4b8d39b8eb050f9f#file-task-php-refactoring-md)
