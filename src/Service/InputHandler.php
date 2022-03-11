@@ -33,16 +33,15 @@ class InputHandler {
 		try {
 
 			// To turn the row (json formatted) into array 
-	    	$decoded_input = json_decode($row, true, JSON_THROW_ON_ERROR);
+	    	$decodedInput = json_decode($row, true, JSON_THROW_ON_ERROR);
 
-	        $bin      = $decoded_input['bin'] ?? throw new Exception\InputInvalidJsonFormatted;
-	        $amount   = $decoded_input['amount'] ?? throw new Exception\InputInvalidJsonFormatted;
-	        $currency = $decoded_input['currency'] ?? throw new Exception\InputInvalidJsonFormatted;
+			// To get rid of the "missing index" issue
+    		$decodedInput += ['bin' => null, 'amount' => null, 'currency' => null];
 
-	    	return new Entity\Transaction($bin, $amount, $currency);
+	    	return new Entity\Transaction($decodedInput['bin'], $decodedInput['amount'], $decodedInput['currency']);
 
 		}  catch (\JsonException $e) {
-		    throw new EncryptException($e->getMessage());
+		    throw new Exception\InputInvalidJsonFormatted;
 		}
 	} 
 
